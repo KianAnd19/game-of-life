@@ -7,16 +7,18 @@ pygame.init()
 # Constants
 WIDTH, HEIGHT = 800, 800
 CELL_SIZE = 20
+FADE_STEPS = 10
 ROWS, COLS = HEIGHT // CELL_SIZE, WIDTH // CELL_SIZE
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 
+
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Conway's Game of Life")
 
 grid = np.zeros((ROWS, COLS), dtype=int)
-
+fade_grid = np.zeros((ROWS, COLS), dtype=int)
 
 def draw_grid():
     for x in range(0, WIDTH, CELL_SIZE):
@@ -26,22 +28,28 @@ def draw_grid():
 
 
 def draw_cells():
-    for y, row in enumerate(grid):
+    for y, row in enumerate(fade_grid):
         for x, cell in enumerate(row):
-            if cell:
+            if cell > 0:
                 pygame.draw.rect(screen, BLACK, (x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE))
 
 
 def update_cells():
     new_grid = grid.copy()
+    new_fade_grid = fade_grid.copy()
     for y in range(ROWS):
         for x in range(COLS):
             alive_neighbors = sum(grid[(y + i) % ROWS][(x + j) % COLS] for i in (-1, 0, 1) for j in (-1, 0, 1) if (i, j) != (0, 0))
             if grid[y][x] and not 2 <= alive_neighbors <= 3:
                 new_grid[y][x] = 0
+                if fade_grid[y][x] > 0:
+                    new_fade_grid[y][x] -= 1
+                else:
+                    new_fade_grid[y][x] = 0
             elif not grid[y][x] and alive_neighbors == 3:
                 new_grid[y][x] = 1
-    return new_grid
+                new_fade_grid[y][x] = FADE_STEPS
+    return new_grid, new_fade_grid
 
 
 running = True
@@ -53,7 +61,8 @@ while running:
     pygame.display.flip()
 
     if not paused:
-        grid = update_cells()
+        grid = update_cells()[0]
+        fade_grid = update_cells()[1]
 
     pygame.time.wait(100)
 
