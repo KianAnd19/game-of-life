@@ -20,6 +20,7 @@ ROWS = (HEIGHT - TITLE_HEIGHT) // CELL_SIZE
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 
+# Constants for the Title
 title_font = pygame.font.SysFont("Arial", 48)
 title_surface = title_font.render("Game of Life", True, BLACK)
 title_rect = title_surface.get_rect(center=(WIDTH // 2, title_font.get_height() // 2))
@@ -32,6 +33,7 @@ pygame.display.set_caption("Conway's Game of Life")
 grid = np.zeros((ROWS, COLS), dtype=int)
 fade_grid = np.zeros((ROWS, COLS), dtype=int)
 
+#Draws the gird
 def draw_grid():
     for x in range(0, WIDTH, CELL_SIZE):
         pygame.draw.line(screen, BLACK, (x, 0), (x, HEIGHT))
@@ -39,6 +41,7 @@ def draw_grid():
         pygame.draw.line(screen, BLACK, (0, y), (WIDTH, y))
 
 
+#Colours the cells
 def draw_cells():
     for y, row in enumerate(fade_grid):
         for x, cell in enumerate(row):
@@ -48,9 +51,7 @@ def draw_cells():
                 color = (color_intensity, color_intensity, color_intensity)  # RGB color from black to white
                 pygame.draw.rect(screen, color, (x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE))
 
-
-
-
+#Checks if condotions hold for all the cells
 def update_cells():
     new_grid = grid.copy()
     new_fade_grid = fade_grid.copy()
@@ -73,7 +74,7 @@ def update_cells():
 
 
 
-
+# This is the main game loop
 running = True
 paused = False
 while running:
