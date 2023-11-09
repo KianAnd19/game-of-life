@@ -4,14 +4,26 @@ import numpy as np
 # Initialize pygame
 pygame.init()
 
+
+
 # Constants
 WIDTH, HEIGHT = 800, 800
 CELL_SIZE = 20
 FADE_STEPS = 20  # Number of steps it takes for a cell to fade out
 ROWS, COLS = HEIGHT // CELL_SIZE, WIDTH // CELL_SIZE
 
+# Adjust the HEIGHT to include space for the title
+TITLE_HEIGHT = 60  # Height for the title space
+HEIGHT = 800 + TITLE_HEIGHT
+ROWS = (HEIGHT - TITLE_HEIGHT) // CELL_SIZE
+
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
+
+title_font = pygame.font.SysFont("Arial", 48)
+title_surface = title_font.render("Game of Life", True, BLACK)
+title_rect = title_surface.get_rect(center=(WIDTH // 2, title_font.get_height() // 2))
+
 
 
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -68,6 +80,9 @@ while running:
     screen.fill(WHITE)
     draw_cells()
     draw_grid()
+
+    screen.blit(title_surface, title_rect)
+
     pygame.display.flip()
 
     if not paused:
