@@ -4,11 +4,18 @@ import numpy as np
 # Initialize pygame
 pygame.init()
 
+
+
 # Constants
 WIDTH, HEIGHT = 800, 800
 CELL_SIZE = 20
 FADE_STEPS = 20  # Number of steps it takes for a cell to fade out
 ROWS, COLS = HEIGHT // CELL_SIZE, WIDTH // CELL_SIZE
+
+# Adjust the HEIGHT to include space for the title
+TITLE_HEIGHT = 60  # Height for the title space
+HEIGHT = 800 + TITLE_HEIGHT
+ROWS = (HEIGHT - TITLE_HEIGHT) // CELL_SIZE
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -74,7 +81,7 @@ while running:
     draw_cells()
     draw_grid()
 
-    # screen.blit(title_surface, title_rect)
+    screen.blit(title_surface, title_rect)
 
     pygame.display.flip()
 
