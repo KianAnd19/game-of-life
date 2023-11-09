@@ -7,7 +7,7 @@ pygame.init()
 # Constants
 WIDTH, HEIGHT = 800, 800
 CELL_SIZE = 20
-FADE_STEPS = 10
+FADE_STEPS = 20  # Number of steps it takes for a cell to fade out
 ROWS, COLS = HEIGHT // CELL_SIZE, WIDTH // CELL_SIZE
 
 WHITE = (255, 255, 255)
