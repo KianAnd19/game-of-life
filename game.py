@@ -13,6 +13,11 @@ ROWS, COLS = HEIGHT // CELL_SIZE, WIDTH // CELL_SIZE
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 
+title_font = pygame.font.SysFont("Arial", 48)
+title_surface = title_font.render("Game of Life", True, BLACK)
+title_rect = title_surface.get_rect(center=(WIDTH // 2, title_font.get_height() // 2))
+
+
 
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Conway's Game of Life")
@@ -68,6 +73,9 @@ while running:
     screen.fill(WHITE)
     draw_cells()
     draw_grid()
+
+    # screen.blit(title_surface, title_rect)
+
     pygame.display.flip()
 
     if not paused:
