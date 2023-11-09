@@ -28,7 +28,7 @@ When a cell dies, it doesn't turn to white directly. Instead, it fades to white 
 Make sure you have Python and Pygame installed on your system. You can install Pygame using pip:
 
 ```bash
-pip install pygame
+pip install -r requriements.txt
 ```
 
 
