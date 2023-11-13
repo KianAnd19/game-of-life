@@ -36,20 +36,19 @@ fade_grid = np.zeros((ROWS, COLS), dtype=int)
 #Draws the gird
 def draw_grid():
     for x in range(0, WIDTH, CELL_SIZE):
-        pygame.draw.line(screen, BLACK, (x, 0), (x, HEIGHT))
-    for y in range(0, HEIGHT, CELL_SIZE):
+        pygame.draw.line(screen, BLACK, (x, TITLE_HEIGHT), (x, HEIGHT))
+    for y in range(TITLE_HEIGHT, HEIGHT, CELL_SIZE):
         pygame.draw.line(screen, BLACK, (0, y), (WIDTH, y))
 
-
-#Colours the cells
+# Colours the cells
 def draw_cells():
     for y, row in enumerate(fade_grid):
         for x, cell in enumerate(row):
             if cell > 0:
-                # Invert the color intensity: it should be less intense as the cell's fade value decreases
                 color_intensity = int(255 * (1 - (cell / FADE_STEPS)))
-                color = (color_intensity, color_intensity, color_intensity)  # RGB color from black to white
-                pygame.draw.rect(screen, color, (x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE))
+                color = (color_intensity, color_intensity, color_intensity)
+                pygame.draw.rect(screen, color, (x * CELL_SIZE, y * CELL_SIZE + TITLE_HEIGHT, CELL_SIZE, CELL_SIZE))
+
 
 #Checks if condotions hold for all the cells
 def update_cells():
@@ -97,13 +96,18 @@ while running:
             running = False
         if event.type == pygame.MOUSEBUTTONDOWN:
             x, y = event.pos
-            cell_x, cell_y = x // CELL_SIZE, y // CELL_SIZE
-            if grid[cell_y][cell_x] == 0:  # If the cell is dead
-                grid[cell_y][cell_x] = 1
-                fade_grid[cell_y][cell_x] = FADE_STEPS  # Revive the cell with full intensity
-            else:  # If the cell is alive
-                grid[cell_y][cell_x] = 0
-                fade_grid[cell_y][cell_x] = 0  # Immediately set fade to 0
+            # Check if the click is below the title area
+            if y >= TITLE_HEIGHT:
+                # Adjust cell_y to account for the title area
+                cell_x, cell_y = x // CELL_SIZE, (y - TITLE_HEIGHT) // CELL_SIZE
+                # Ensure the click is within the grid bounds
+                if 0 <= cell_x < COLS and 0 <= cell_y < ROWS:
+                    if grid[cell_y][cell_x] == 0:  # If the cell is dead
+                        grid[cell_y][cell_x] = 1
+                        fade_grid[cell_y][cell_x] = FADE_STEPS  # Revive the cell with full intensity
+                    else:  # If the cell is alive
+                        grid[cell_y][cell_x] = 0
+                        fade_grid[cell_y][cell_x] = 0  # Immediately set fade to 0
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_p:
                 paused = not paused
